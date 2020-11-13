@@ -12,7 +12,7 @@ def create_app():
     """Creating and configuring an instance of the Flask application"""
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URI")
+    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     DB.init_app(app)
@@ -20,8 +20,7 @@ def create_app():
     @app.route('/')
     def root():
 
-        users = User.query.all()
-        return render_template('base.html', title='home', users=users)
+        return render_template('base.html', title='home', users=User.query.all())
 
 
     @app.route('/compare',methods=['POST'])
@@ -53,7 +52,7 @@ def create_app():
         except Exception as e:
             message = 'Error adding {}: {}'.format(name, e)
             tweets = []
-        return render_template('user.html', title='name', tweets=tweets, message=message)
+        return render_template('user.html', title=name, tweets=tweets, message=message)
 
 
     @app.route('/update')
@@ -64,7 +63,7 @@ def create_app():
 
     @app.route('/reset')
     def reset():
-        DB.drop.all()
+        DB.drop_all()
         DB.create_all()
         return render_template('base.html', users=User.query.all(), title='All Tweets updated!')
     return app

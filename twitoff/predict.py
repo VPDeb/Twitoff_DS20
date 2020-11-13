@@ -23,4 +23,4 @@ def predict_user(user0_name, user1_name, hypo_tweet_text):
 
     log_reg = LogisticRegression().fit(vects, labels)
     
-    return log_reg.predit(hypo_tweet_vect.reshape(1, -1))
+    return log_reg.predict(hypo_tweet_vect.reshape(1, -1))
